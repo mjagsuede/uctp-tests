@@ -1,0 +1,136 @@
+# Runs your tests on GitHub every time you commit a change or open a pull request.
+# See the result in the Actions tab: green check = all passed, red X = a test failed.
+name: UCTP tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:   # adds a "Run workflow" button in the Actions tab
+
+jobs:
+  api:
+    name: API tests (Playwright, no browser)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      REPORT: api
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Runner tests (no browser)
+        run: npm run test:runner
+      - run: npm run test:api
+      - name: Keep the API report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: api-report
+          path: reports/api/
+          retention-days: 14
+
+  web:
+    name: Web tests (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      REPORT: web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:web
+      - name: Keep the web report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: web-report
+          path: reports/web/
+          retention-days: 14
+
+  integration:
+    name: Integration tests (API + screen)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      REPORT: integration
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:integration
+      - name: Keep the integration report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: integration-report
+          path: reports/integration/
+          retention-days: 14
+
+  firefox:
+    name: Web + integration in Firefox (info only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    continue-on-error: true   # shows Firefox results; never turns the run red
+    env:
+      REPORT: firefox
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps firefox
+      - run: npx playwright test tests/web tests/integration --project=firefox
+      - name: Keep the Firefox report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: firefox-report
+          path: reports/firefox/
+          retention-days: 14
+
+  summary:
+    name: Test run summary
+    needs: [api, web, integration]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v7
+        with:
+          name: api-report
+          path: reports/api
+        continue-on-error: true
+      - uses: actions/download-artifact@v7
+        with:
+          name: web-report
+          path: reports/web
+        continue-on-error: true
+      - uses: actions/download-artifact@v7
+        with:
+          name: integration-report
+          path: reports/integration
+        continue-on-error: true
+      - run: npm run summary
+      - name: Keep the summary (give this file to the AI to update your charter)
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-run-summary
+          path: reports/summary.json
+          retention-days: 14

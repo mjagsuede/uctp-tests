@@ -1,0 +1,40 @@
+# Publishes the test reports (the test-runs folder) as a web page on GitHub Pages, on every push to main.
+# Turn it on once in your repo: Settings › Pages › Source: GitHub Actions.
+# Then the list of runs is at https://<your-username>.github.io/uctp-tests/
+name: Test reports on GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['test-runs/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Publish test-runs
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Make sure there is a page to show
+        run: |
+          mkdir -p test-runs
+          [ -f test-runs/index.html ] || echo '<!doctype html><meta charset="utf-8"><title>Test runs</title><h1>Test runs</h1><p>No runs yet.</p>' > test-runs/index.html
+          touch test-runs/.nojekyll
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: test-runs
+      - id: deployment
+        uses: actions/deploy-pages@v5

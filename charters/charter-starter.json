@@ -1,0 +1,258 @@
+{
+ "format": "qe360-mindmap",
+ "version": 1,
+ "title": "Charter starter",
+ "settings": {
+  "rollupMode": "percentage",
+  "leafOnlyRollup": true,
+  "enableStatusPropagation": true,
+  "statusDefinitions": [
+   {
+    "id": "st_notstarted",
+    "label": "Heading",
+    "color": "transparent",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_api",
+    "label": "API test",
+    "color": "#10B981",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_ui",
+    "label": "UI journey",
+    "color": "#38BDF8",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_int",
+    "label": "Integration",
+    "color": "#8B5CF6",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_idea",
+    "label": "Idea (later)",
+    "color": "#EAB308",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_manual",
+    "label": "Manual",
+    "color": "#94A3B8",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   }
+  ],
+  "severityOrder": [
+   "st_manual",
+   "st_idea",
+   "st_int",
+   "st_ui",
+   "st_api",
+   "st_notstarted"
+  ]
+ },
+ "root": {
+  "id": "n18",
+  "text": "Card NN · <story ID> · <story name>",
+  "note": "",
+  "collapsed": false,
+  "statusId": null,
+  "highlight": null,
+  "children": [
+   {
+    "id": "n1",
+    "text": "Story: <paste the story and its acceptance criteria>",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n10",
+    "text": "<Page> › <section> (where the clerk does it)",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n3",
+      "text": "Upon page load",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n2",
+        "text": "W1 · AC-n · <open the form: what you see, exact texts>\nSteps: Home › button \"…\" (say button or link)\n→ On screen: <exact heading, labels, buttons>",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "n6",
+      "text": "Element validations",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n4",
+        "text": "T? · <heuristic> − · <one broken rule>\nPOST /api/… {<body>}\n→ <status> {<exact message>}",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n5",
+        "text": "W2 · <heuristic> − · <the same broken rule, on the screen>\nSteps: … type <value> › button \"<name>\"\n→ On screen: under <field>: \"<exact message>\"",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "n9",
+      "text": "Functional validations",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n7",
+        "text": "A1 · AC-n · <create … using <test data>>\nPOST /api/… {<body>}\n→ 201 <the fields you check>",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n8",
+        "text": "W3 · AC-n · <create … on the screen using <test data>>\nSteps: …\n→ On screen: <exact result text>",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "n14",
+    "text": "<Page where you check it> › <list>",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n11",
+      "text": "A2 · AC-n · <read back the … from A1>\nGET /api/…\n→ 200 <fields>",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n12",
+      "text": "T? · Users − · another user asks for it\nGET /api/… with X-User-ID: <you>-probe\n→ 404 {\"detail\":\"Not Found\"}",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n13",
+      "text": "W4 · AC-n · <see the new … in the list>\nSteps: top bar link \"…\"\n→ On screen: row <exact texts>",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_ui",
+      "highlight": null,
+      "children": []
+     }
+    ]
+   },
+   {
+    "id": "sInt",
+    "text": "Integration: the API and the screen agree",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "sInt1",
+      "text": "I1 · AC-n · <create … with the API, see it on the screen>\n<API call> › screen: top bar link \"…\"\n→ <what the screen shows, the same as the API>",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "sInt2",
+      "text": "I2 · AC-n · <show the same message on the API and the screen for <broken input>>\nsend it to the API, then type it on the screen\n→ the text under the field = the API's message, word for word",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     }
+    ]
+   },
+   {
+    "id": "n15",
+    "text": "Manual: is it clear for a clerk? (wording, layout)",
+    "note": "",
+    "collapsed": false,
+    "statusId": "st_manual",
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n16",
+    "text": "Risk: <what goes wrong if this breaks>",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n17",
+    "text": "Coverage: <what this charter covers and leaves out>",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   }
+  ]
+ }
+}

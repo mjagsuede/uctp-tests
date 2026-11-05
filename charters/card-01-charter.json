@@ -1,0 +1,676 @@
+{
+ "format": "qe360-mindmap",
+ "version": 1,
+ "settings": {
+  "rollupMode": "percentage",
+  "leafOnlyRollup": true,
+  "enableStatusPropagation": true,
+  "statusDefinitions": [
+   {
+    "id": "st_notstarted",
+    "label": "Heading",
+    "color": "transparent",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_api",
+    "label": "API test",
+    "color": "#10B981",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_ui",
+    "label": "UI journey",
+    "color": "#38BDF8",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_int",
+    "label": "Integration",
+    "color": "#8B5CF6",
+    "countsAsComplete": true,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_idea",
+    "label": "Idea (later)",
+    "color": "#EAB308",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   },
+   {
+    "id": "st_manual",
+    "label": "Manual",
+    "color": "#94A3B8",
+    "countsAsComplete": false,
+    "triggersFailureCascade": false
+   }
+  ],
+  "severityOrder": [
+   "st_manual",
+   "st_idea",
+   "st_int",
+   "st_ui",
+   "st_api",
+   "st_notstarted"
+  ]
+ },
+ "title": "Card 01 test charter (reference)",
+ "root": {
+  "id": "n67",
+  "text": "Card 01 · TRN-01 · Register a taxpayer",
+  "note": "",
+  "collapsed": false,
+  "statusId": null,
+  "highlight": null,
+  "children": [
+   {
+    "id": "n1",
+    "text": "Story: As a clerk, I create a taxpayer with a mobile, so I can bill them later.\nAC-1 Created message · AC-2 Shows in My data · AC-3 Spaces removed · AC-4 Duplicate mobile refused · AC-5 Name rules · AC-6 Email rules · AC-7 Only my name-tag sees it · AC-8 Mobile rules\n(Full ACs and the example API response are in this node's note.)",
+    "note": "Card 01 · TRN-01 · Register a taxpayer\nStory: As a clerk, I create a taxpayer with a mobile, so I can bill them later.\nAC-1 Section \"1 — Create a taxpayer\" shows [full name] created — mobile [mobile].\nAC-2 The same taxpayer details show under My data › My taxpayers.\nAC-3 Spaces around the name are removed, both in the \"created\" message and in My data.\nAC-4 A mobile that's already registered is not accepted. Message: already registered for this tenant\nAC-5 Name accepts only 2–100 characters: letters, spaces, . - ' and Ñ. Message: 2-100 characters: letters, spaces, . - ' and Ñ only\nAC-6 Email is optional. If typed, it needs one @ with a dot after it, 254 characters max. Message: invalid email format\nAC-7 A taxpayer created under my name-tag shows only for that name-tag. Under another name-tag, My data shows \"None yet — create one in Training setup.\" and the Taxpayer lists are empty.\nAC-8 Mobile accepts only 09 + 9 digits, or +639 + 9 digits. No spaces, no dashes. Message: must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\nExample: POST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"09013724603\"} → 201 {\"taxpayer_id\":\"d55f5627-…\",\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"09013724603\",\"email\":null,\"created_at\":\"2026-11-02T18:22:04.959Z\"}\nList: GET /api/v1/training/taxpayers → 200 [ {taxpayer_id, tenant_id, full_name, mobile, email, created_by, created_at}, … ]",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n44",
+    "text": "Training setup › 1 — Create a taxpayer",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n3",
+      "text": "1. Upon page load",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n2",
+        "text": "W1 · AC-1 · open the Create a taxpayer form: all boxes empty, no result box\nSteps: Home › button \"Create my data\" › (nothing else)\n→ On screen: heading \"1 — Create a taxpayer\"; empty boxes Full name, Mobile (09XXXXXXXXX), Email (optional); button \"Create taxpayer\"; no result box",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "n34",
+      "text": "2. Element validations (one rule per node)",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n14",
+        "text": "AC-5 · Name",
+        "note": "",
+        "collapsed": false,
+        "statusId": null,
+        "highlight": null,
+        "children": [
+         {
+          "id": "n4",
+          "text": "A5 · AC-5 · accept the full name \"Al\" (2 letters, the lower limit)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Al\",\"mobile\":\"<new mobile>\"}\n→ 201, full_name \"Al\"",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n5",
+          "text": "A6 · AC-5 · accept a full name of 100 letters (the upper limit)\nPOST /api/v1/training/taxpayers {\"full_name\":\"<100 letters>\",\"mobile\":\"<new mobile>\"}\n→ 201, full_name is the 100 letters",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n6",
+          "text": "A7 · AC-5 · accept the full name \"Ñoño O'Brien-Cruz Jr.\" (Ñ and . - ')\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ñoño O'Brien-Cruz Jr.\",\"mobile\":\"<new mobile>\"}\n→ 201, full_name \"Ñoño O'Brien-Cruz Jr.\"",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n7",
+          "text": "A12 · AC-5 · refuse the full name \"A\" (1 letter)\nPOST /api/v1/training/taxpayers {\"full_name\":\"A\",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n8",
+          "text": "A13 · AC-5 · refuse the full name \"  A  \" (1 letter with spaces around)\nPOST /api/v1/training/taxpayers {\"full_name\":\"  A  \",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n9",
+          "text": "A14 · AC-5 · refuse a full name of 101 letters (one too many)\nPOST /api/v1/training/taxpayers {\"full_name\":\"<101 letters>\",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n10",
+          "text": "A15 · AC-5 · refuse the full name \"Ana 2\" (a digit)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana 2\",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n11",
+          "text": "A16 · AC-5 · refuse the full name \"Ana@Cruz\" (a symbol)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana@Cruz\",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n12",
+          "text": "A17 · AC-5 · refuse a blank full name \"\"\nPOST /api/v1/training/taxpayers {\"full_name\":\"\",\"mobile\":\"<new mobile>\"}\n→ 422 {\"detail\":{\"full_name\":\"2-100 characters: letters, spaces, . - ' and Ñ only\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n13",
+          "text": "W6 · AC-5 · refuse the full name \"A\" (1 letter) on the screen\nSteps: Home › button \"Create my data\" › Full name \"A\", Mobile <new mobile> › button \"Create taxpayer\"\n→ On screen: under Full name: \"2-100 characters: letters, spaces, . - ' and Ñ only\"; no result box",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_ui",
+          "highlight": null,
+          "children": []
+         }
+        ]
+       },
+       {
+        "id": "n23",
+        "text": "AC-8 · Mobile",
+        "note": "",
+        "collapsed": false,
+        "statusId": null,
+        "highlight": null,
+        "children": [
+         {
+          "id": "n15",
+          "text": "A11 · AC-8 · accept the mobile +639 + 9 digits (saved as 09 + the same 9 digits)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"+639<9 new digits>\"}\n→ 201, mobile saved as 09 + the same 9 digits",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n16",
+          "text": "A18 · AC-8 · refuse the mobile 0917123456 (10 digits)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"0917123456\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n17",
+          "text": "A19 · AC-8 · refuse the mobile 091712345678 (12 digits)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"091712345678\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n18",
+          "text": "A20 · AC-8 · refuse the mobile \"0917 123 4567\" (spaces)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"0917 123 4567\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n19",
+          "text": "A21 · AC-8 · refuse the mobile 0917-123-4567 (dashes)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"0917-123-4567\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n20",
+          "text": "A22 · AC-8 · refuse the mobile 08171234567 (starts with 08)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"08171234567\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n21",
+          "text": "A23 · AC-8 · refuse the mobile +638171234567 (starts with +638)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"+638171234567\"}\n→ 422 {\"detail\":{\"mobile\":\"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n22",
+          "text": "W8 · AC-8 · refuse the mobile 0917-123-4567 (dashes) on the screen\nSteps: Home › button \"Create my data\" › Full name \"Ana Dela Cruz\", Mobile \"0917-123-4567\" › button \"Create taxpayer\"\n→ On screen: under Mobile (09XXXXXXXXX): \"must be a PH mobile 09XXXXXXXXX or +639XXXXXXXXX\"; no result box",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_ui",
+          "highlight": null,
+          "children": []
+         }
+        ]
+       },
+       {
+        "id": "n32",
+        "text": "AC-6 · Email (optional)",
+        "note": "",
+        "collapsed": false,
+        "statusId": null,
+        "highlight": null,
+        "children": [
+         {
+          "id": "n24",
+          "text": "A8 · AC-6 · accept a blank email \"\" (saved as null)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<new mobile>\",\"email\":\"\"}\n→ 201, email null",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n25",
+          "text": "A9 · AC-6 · accept the email \"rosa@example.com\"\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<new mobile>\",\"email\":\"rosa@example.com\"}\n→ 201, email \"rosa@example.com\"",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n26",
+          "text": "A10 · AC-6 · accept an email of 254 characters (the limit)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<new mobile>\",\"email\":\"<242 a>@example.com\"}\n→ 201, email is the 254 characters",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n27",
+          "text": "A24 · AC-6 · refuse the email \"rosa.example.com\" (no @)\nPOST /api/v1/training/taxpayers {…,\"email\":\"rosa.example.com\"}\n→ 422 {\"detail\":{\"email\":\"invalid email format\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n28",
+          "text": "A25 · AC-6 · refuse the email \"rosa@@example.com\" (two @)\nPOST /api/v1/training/taxpayers {…,\"email\":\"rosa@@example.com\"}\n→ 422 {\"detail\":{\"email\":\"invalid email format\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n29",
+          "text": "A26 · AC-6 · refuse the email \"rosa@examplecom\" (no dot after @)\nPOST /api/v1/training/taxpayers {…,\"email\":\"rosa@examplecom\"}\n→ 422 {\"detail\":{\"email\":\"invalid email format\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n30",
+          "text": "A27 · AC-6 · refuse an email of 255 characters (one too many)\nPOST /api/v1/training/taxpayers {…,\"email\":\"<243 a>@example.com\"}\n→ 422 {\"detail\":{\"email\":\"invalid email format\"}}",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_api",
+          "highlight": null,
+          "children": []
+         },
+         {
+          "id": "n31",
+          "text": "W7 · AC-6 · refuse the email \"rosa@examplecom\" (no dot after @) on the screen\nSteps: Home › button \"Create my data\" › Full name \"Ana Dela Cruz\", Mobile <new mobile>, Email \"rosa@examplecom\" › button \"Create taxpayer\"\n→ On screen: under Email (optional): \"invalid email format\"; no result box",
+          "note": "",
+          "collapsed": false,
+          "statusId": "st_ui",
+          "highlight": null,
+          "children": []
+         }
+        ]
+       },
+       {
+        "id": "n33",
+        "text": "Only the first broken rule shows (order: name, mobile, email). Try name \"A\" and mobile \"0917\": only the name message.",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_manual",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "n43",
+      "text": "3. Functional validations",
+      "note": "",
+      "collapsed": false,
+      "statusId": null,
+      "highlight": null,
+      "children": [
+       {
+        "id": "n35",
+        "text": "A1 · AC-1 · create a taxpayer using \"Ana Dela Cruz\" and a new mobile, no email\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<new mobile>\"}\n→ 201, full_name \"Ana Dela Cruz\", mobile <new mobile>, email null, has taxpayer_id and created_at",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n36",
+        "text": "W2 · AC-1 · create a taxpayer on the screen using \"Ana Dela Cruz\" and a new mobile\nSteps: Home › button \"Create my data\" › Full name \"Ana Dela Cruz\", Mobile <new mobile> › button \"Create taxpayer\"\n→ On screen: \"Ana Dela Cruz created — mobile <new mobile>.\"",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n37",
+        "text": "A4 · AC-3 · create a taxpayer using \"  Ana Dela Cruz  \" (spaces around): saved as \"Ana Dela Cruz\"\nPOST /api/v1/training/taxpayers {\"full_name\":\"  Ana Dela Cruz  \",\"mobile\":\"<new mobile>\"}\n→ 201, full_name \"Ana Dela Cruz\"",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n38",
+        "text": "W4 · AC-3 · create a taxpayer using \"  Rosa Web  \": shown as \"Rosa Web\"\nSteps: Home › button \"Create my data\" › Full name \"  Rosa Web  \", Mobile <new mobile> › button \"Create taxpayer\" › top bar link \"My data\"\n→ On screen: \"Rosa Web created — mobile <new mobile>.\"; My taxpayers row starts \"Rosa Web\"",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n39",
+        "text": "A28 · AC-4 · refuse a mobile I already registered (409)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ben Dela Cruz\",\"mobile\":\"<a mobile I already registered>\"}\n→ 409 {\"detail\":{\"mobile\":\"already registered for this tenant\"}}",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n40",
+        "text": "A29 · AC-4 · refuse a mobile I already registered, sent in +639 form (409)\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ben Dela Cruz\",\"mobile\":\"+639<the same 9 digits>\"}\n→ 409 {\"detail\":{\"mobile\":\"already registered for this tenant\"}}",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n41",
+        "text": "W5 · AC-4 · refuse the same mobile twice on the screen (\"Ben Dela Cruz\" after \"Ana Dela Cruz\")\nSteps: Home › button \"Create my data\" › create a taxpayer with <new mobile> › reload › create another with the same mobile\n→ On screen: under Mobile (09XXXXXXXXX): \"already registered for this tenant\"",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_ui",
+        "highlight": null,
+        "children": []
+       },
+       {
+        "id": "n42",
+        "text": "A30 · AC-5 · save nothing when the full name \"A\" is refused (the same mobile then works)\nPOST /api/v1/training/taxpayers {\"full_name\":\"A\",\"mobile\":\"<new mobile>\"} then POST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<the same mobile>\"}\n→ first 422, then 201 (the refused one was not saved)",
+        "note": "",
+        "collapsed": false,
+        "statusId": "st_api",
+        "highlight": null,
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "n53",
+    "text": "My data › My taxpayers (where you check it)",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n45",
+      "text": "A2 · AC-2 · read back the taxpayer from A1 by its taxpayer_id\nGET /api/v1/training/taxpayers/{taxpayer_id}\n→ 200, the same taxpayer_id, full_name, mobile, email, created_at as A1",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n46",
+      "text": "A3 · AC-2 · find the taxpayer from A1 in my list (created_by = my name-tag)\nGET /api/v1/training/taxpayers\n→ 200, a row with the same taxpayer_id, full_name, mobile, and created_by = my name-tag",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n47",
+      "text": "W3 · AC-2 · see the new taxpayer \"Ana Dela Cruz\" in My data\nSteps: Home › button \"Create my data\" › create \"Ana Dela Cruz\" with <new mobile> › top bar link \"My data\"\n→ On screen: row Ana Dela Cruz | <new mobile> | —",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_ui",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n48",
+      "text": "W9 · AC-7 · show nothing to another name-tag (\"Probe\") in My data\nSteps: top bar link \"Change\" › type a new name (e.g. \"Probe\") › button \"Save\" › top bar link \"My data\"\n→ On screen: under My taxpayers: \"None yet — create one in Training setup.\"",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_ui",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n49",
+      "text": "A31 · AC-7 · hide my taxpayer from another user (X-User-ID <me>-probe gets 404)\nGET /api/v1/training/taxpayers/{taxpayer_id} with X-User-ID: <me>-probe\n→ 404 {\"detail\":\"Not Found\"}",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n50",
+      "text": "A32 · AC-7 · leave my taxpayer out of another user's list (X-User-ID <me>-probe)\nGET /api/v1/training/taxpayers with X-User-ID: <me>-probe\n→ 200, and my taxpayer_id is not in it",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n51",
+      "text": "A33 · AC-7 · treat my name-tag in other letter case as another user (404)\nGET /api/v1/training/taxpayers/{taxpayer_id} with X-User-ID: <my name-tag in other case, e.g. ana-4821>\n→ 404 {\"detail\":\"Not Found\"}",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n52",
+      "text": "A34 · AC-7 · refuse a request with no X-User-ID header (422)\nGET /api/v1/training/taxpayers/{taxpayer_id} with no X-User-ID\n→ 422 {\"detail\":{\"X-User-ID\":\"required header\"}}",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_api",
+      "highlight": null,
+      "children": []
+     }
+    ]
+   },
+   {
+    "id": "n60",
+    "text": "Integration: the API and the screen agree",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n54",
+      "text": "I1 · AC-1, AC-2 · create \"Ana Dela Cruz\" with the API, see it on the screen\nPOST /api/v1/training/taxpayers {\"full_name\":\"Ana Dela Cruz\",\"mobile\":\"<new mobile>\",\"email\":\"rosa@example.com\"} › screen: top bar link \"My data\"\n→ row Ana Dela Cruz | <new mobile> | rosa@example.com",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n55",
+      "text": "I2 · AC-1, AC-3 · create \"  Rosa Web  \" on the screen, read \"Rosa Web\" from the API\nSteps: Home › button \"Create my data\" › Full name \"  Rosa Web  \", Mobile <new mobile> › button \"Create taxpayer\" › GET /api/v1/training/taxpayers\n→ a row full_name \"Rosa Web\", mobile <new mobile>, email null, created_by = my name-tag",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n56",
+      "text": "I3 · AC-5, AC-6, AC-8 · show the same message on the API and the screen for name \"A\", mobile \"0917-123-4567\" and email \"rosa@examplecom\"\nFor name \"A\", mobile \"0917-123-4567\", email \"rosa@examplecom\": send it to the API, then type it on the screen\n→ the text under the field on the screen = the API's detail message, word for word",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n57",
+      "text": "I4 · AC-5, AC-8 · accept on the screen what the API accepts (\"Ñoño O'Brien-Cruz Jr.\", +639 mobile)\nSteps: Home › button \"Create my data\" › Full name \"Ñoño O'Brien-Cruz Jr.\", Mobile \"+639<9 new digits>\" › button \"Create taxpayer\"\n→ \"Ñoño O'Brien-Cruz Jr. created — mobile 09<the same 9 digits>.\" (the 09 form the API stores)",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n58",
+      "text": "I5 · AC-4 · refuse on the screen a mobile the API registered\nPOST /api/v1/training/taxpayers with <new mobile> › Steps: Home › button \"Create my data\" › Full name \"Ben Dela Cruz\", the same mobile › button \"Create taxpayer\"\n→ under Mobile (09XXXXXXXXX): \"already registered for this tenant\"",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n59",
+      "text": "I6 · AC-7 · use the same name-tag on the screen and the API (a probe user's taxpayer stays hidden)\nPOST /api/v1/training/taxpayers as X-User-ID <me>-probe with mobile A, and as me with mobile B › screen as me: top bar link \"My data\"\n→ a row with mobile B; no row with mobile A",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_int",
+      "highlight": null,
+      "children": []
+     }
+    ]
+   },
+   {
+    "id": "n63",
+    "text": "Questions for the BA (not failures)",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": [
+     {
+      "id": "n61",
+      "text": "AC-4 vs AC-7: another name-tag can't see my taxpayer but can't register its mobile either. Intended?",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_idea",
+      "highlight": null,
+      "children": []
+     },
+     {
+      "id": "n62",
+      "text": "Anyone who types my whole name-tag sees my data. Is that what the city wants?",
+      "note": "",
+      "collapsed": false,
+      "statusId": "st_idea",
+      "highlight": null,
+      "children": []
+     }
+    ]
+   },
+   {
+    "id": "n64",
+    "text": "DevTools: the Network tab shows X-User-ID = the top-bar name-tag on the taxpayers request",
+    "note": "",
+    "collapsed": false,
+    "statusId": "st_manual",
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n65",
+    "text": "Risk: a wrong mobile means the taxpayer can't be found; a duplicate splits one person's bills; a shared name-tag leaks data; screen and API rules that differ confuse the clerk",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   },
+   {
+    "id": "n66",
+    "text": "Coverage: AC-1 to AC-8 by API (A1–A34), on the screen (W1–W9) and across both (I1–I6). Leaves out the portal, bills and load.",
+    "note": "",
+    "collapsed": false,
+    "statusId": null,
+    "highlight": null,
+    "children": []
+   }
+  ]
+ }
+}
